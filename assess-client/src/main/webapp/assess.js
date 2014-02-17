@@ -1,15 +1,13 @@
 //var rootURL = "http://[2001:638:902:2010:0:168:35:113]:8080/sparql2nl/rest/assess/";
 var rootURL = "http://139.18.2.56:8080/sparql2nl/rest/assess/";
-//var rootURL = "http://localhost:5678/rest/assess/";
+// var rootURL = "http://localhost:5678/rest/assess/";
 var currentQuestion = 0;
 var totalCorrect = 0;
-var totalWrong = 0;
 var questions;
 var correctPositions;
 var selectedPositions;
-var isAnswered = false;
 var isEvaluated = false;
-var MAX_TIME = 600; // Please provide time in seconds
+var MAX_TIME = 10; // Please provide time in seconds
 var timer;
 
 $(document).ready(function() {
@@ -18,28 +16,38 @@ $(document).ready(function() {
 		var l = Ladda.create(this);
 		l.start();
 		var domainsAndProperties = getDomainsAndProperties();
-		var json = JSON.stringify(domainsAndProperties);
-		console.log(json);
 		$.ajax({
-			headers: { 
-		        'Accept': 'application/json',
-		        'Content-Type': 'application/json' 
-		    },
-//			type : 'GET',
-//			url : rootURL + 'questions?domain=http://dbpedia.org/ontology/Person' + getQuestionTypesAsRestParam() + '&limit=' + $('#numberOfQuestionsField').val(),
-//new call
+			headers : {
+				'Accept' : 'application/json',
+				'Content-Type' : 'application/json'
+			},
 			type : 'POST',
-			url : rootURL + 'questions?' + getQuestionTypesAsRestParam() + '&limit=' + $('#numberOfQuestionsField').val(),//domain=' + json+ 
+			url : rootURL + 'questions?' + getQuestionTypesAsRestParam() + '&limit=' + $('#numberOfQuestionsField').val(),
 			dataType : "json",
-			data: JSON.stringify(domainsAndProperties),
-		        
+			data : JSON.stringify(domainsAndProperties),
+
 			// data type of response
 			success : function(data) {
 				var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
 				questions = list[0].questions;
-				document.getElementById("outerQuizContainer").style.display = "block";
-				document.getElementById("flipQuestion").style.display = "none";
-				// renderList
+				$("#outerQuizContainer").show();
+				$("#flipQuestion").hide();
+
+				// either evaluate the questions, or show the next questions
+				$("#flipQuestion").unbind("click");
+				$("#flipQuestion").click(function() {
+					if (isEvaluated) {
+						console.log("loadNewQuestion");
+						loadNewQuestion();
+					} else {
+						console.log("eval");
+						eval();
+					}
+				});
+
+				MAX_TIME = 600;
+				$('#startButton').show();
+				resetAllFields();
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
 				alert("Status: " + textStatus);
@@ -51,30 +59,27 @@ $(document).ready(function() {
 
 	});
 
-	// either evaluate the questions, or show the next questions
-	$("#flipQuestion").click(function() {
-		if (isEvaluated) {
-			loadNewQuestion();
-		} else {
-			eval();
-		}
-
-		// $("#questionPanel").slideToggle("medium");
-		// if(questions.length!=currentQuestion){
-		// var t=setTimeout(slideDown,200);
-		// }
-		// t=setTimeout(loadNewQuestion,250);
-	});
-	// used for dynamically loading the tree
+	// !!! used for dynamically loading the tree !!!
 	// loadTreeData(function(data) {
 	// $('#tree').tree(data);
 	// });
-	$("#tree").load("classes.html");
+	$("#tree").load("classes.html", function() {
+		$("#loadImage").hide();
+		$("#treecontainer").show();
+	});
 	$('#tree').tree();
-
-	// });
+	$('#collapse').click(function() {
+		$("#totalScore").html("");
+		$("#totalScore").hide();
+		$("#questionPanel").hide();
+		$("#flipQuestion").hide();
+		$("#correctMessage").hide();
+		$("#wrongMessage").hide();
+		$('#outerQuizContainer').hide();
+	});
 });
-// wichtig
+
+// !!!wichtig!!!
 function loadTreeData(callback) {
 	$.ajax({
 		type : 'GET',
@@ -109,6 +114,7 @@ function loadTreeData(callback) {
 		}
 	});
 }
+
 function getDomainsAndProperties() {
 	var domains = [];
 	$('#tree > ul > li > input').each(function() {
@@ -118,7 +124,7 @@ function getDomainsAndProperties() {
 			Class.className = next.html();
 			var properties = [];
 			$(next).siblings("ul").children().children().each(function() {
-				if(this.checked){
+				if (this.checked) {
 					properties.push($(this).next().text());
 				}
 			});
@@ -132,21 +138,6 @@ function getDomainsAndProperties() {
 
 $('[rel=tooltip]').tooltip({
 	container : 'body'
-});
-
-$('#form-submit').click(function(e) {
-	alert('click');
-	e.preventDefault();
-	var l = Ladda.create(this);
-	l.start();
-	$.post("your-url", {
-		data : data
-	}, function(response) {
-		console.log(response);
-	}, "json").always(function() {
-		l.stop();
-	});
-	return false;
 });
 
 $("#numberOfQuestionsField").TouchSpin({
@@ -173,45 +164,22 @@ function getQuestionTypesAsRestParam() {
 	return param;
 }
 
-
 function countDown() {
 	MAX_TIME = MAX_TIME - 1;
 	var timeRemain = pad(Math.floor((MAX_TIME / 3600))) + " : " + pad(Math.floor((MAX_TIME % 3600) / 60)) + " : " + pad(Math.floor((MAX_TIME % 3600) % 60));
 	document.getElementById("countDown").innerHTML = timeRemain;
 	if (MAX_TIME <= 0) {
 		window.clearInterval(timer);
-		document.getElementById("questionPanel").style.display = "none";
-		document.getElementById("totalScore").style.display = "block";
-		document.getElementById("flipQuestion").style.display = "none";
-		document.getElementById("totalScore").innerHTML = "TIME OUT! Total Score " + totalCorrect + " out of " + response.feed.entry.length;
-		document.getElementById("correctMessage").style.display = "none";
-		document.getElementById("wrongMessage").style.display = "none";
+		$("#totalScore").show();
+		$("#totalScore").html("TIME OUT! Total Score " + totalCorrect + " out of " + questions.length);
+		$("#questionPanel").hide();
+		$("#flipQuestion").hide();
+		$("#correctMessage").hide();
+		$("#wrongMessage").hide();
 	}
 }
 function pad(n) {
-	return n < 10 ? '0' + n : n
-}
-
-// generate the question and store them in a global variable
-function generateQuestions(domain) {
-	console.log('generating questions...');
-
-	$.ajax({
-		type : 'GET',
-		url : rootURL + '?domain=' + domain,
-		dataType : "json", // data type of response
-		success : function(data) {
-			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
-			questions = list[0].questions;
-		},
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("Status: " + textStatus);
-			alert("Error: " + errorThrown);
-		}
-
-	}).always(function() {
-		l.stop();
-	});
+	return n < 10 ? '0' + n : n;
 }
 
 function slideDown() {
@@ -231,14 +199,29 @@ function resetAllFields() {
 	document.getElementById("option2").style.display = "block";
 	document.getElementById("option3").style.display = "block";
 	document.getElementById("option4").style.display = "block";
-	isAnswered = false;
 }
 
 // start the quiz, i.e. show the first question
 function beginQuiz(startButton) {
-	$('.collapse').collapse();
+	resetAllFields();
+	currentQuestion = 0;
+	totalCorrect = 0;
+	isEvaluated = false;
+
+	correctPositions = [];
+	selectedPositions = [];
+
+	$('#collapse').click();
+
 	timer = window.setInterval("countDown()", 1000);
-	startButton.style.display = "none";
+	MAX_TIME = 600;
+	$('#startButton').hide();
+	$('#outerQuizContainer').show();
+	$("#totalScore").show().html("Total Score");
+	$("#questionPanel").show();
+	$("#flipQuestion").show();
+	$("#correctMessage").show();
+	$("#wrongMessage").show();
 	document.getElementById("questionPanel").style.display = "block";
 	document.getElementById("outerQuizContainer").style.height = "380px";
 	document.getElementById("flipQuestion").style.display = "inline";
@@ -253,19 +236,28 @@ function loadNewQuestion() {
 		document.getElementById("questionPanel").style.display = "none";
 		document.getElementById("totalScore").style.display = "block";
 		document.getElementById("flipQuestion").style.display = "none";
-		document.getElementById("totalScore").innerHTML = "Total Score " + totalCorrect + " out of " + questions.length+". Time left: "+ MAX_TIME + " seconds!";
+		document.getElementById("totalScore").innerHTML = "Total Score " + totalCorrect + " out of " + questions.length + ". Time left: " + MAX_TIME + " seconds!";
 	} else {
 		var question = questions[currentQuestion];
 
 		document.getElementById("questionTitle").innerHTML = question.question;
 		correctPositions = [];
+		if (question.questionType == "truefalse") {
+			document.getElementById("option2").style.display = "none";
+			document.getElementById("option3").style.display = "none";
+			document.getElementById("option4").style.display = "none";
+		} else {
+			document.getElementById("option2").style.display = "block";
+			document.getElementById("option3").style.display = "block";
+			document.getElementById("option4").style.display = "block";
+		}
 		$(question.correctAnswers).each(function(i, val) {
 			correctPositions.push(i);
 		});
 		var answers = question.correctAnswers.concat(question.wrongAnswers);
 		$(answers).each(function(i, val) {
 			var answer = this.answer;
-			var hint = this.answerHint;
+			// var hint = this.answerHint;
 			if (answers[i] != "") {
 				document.getElementById("option" + i).innerHTML = answer;
 			} else {
@@ -275,7 +267,6 @@ function loadNewQuestion() {
 
 		document.getElementById("proceeding").innerHTML = "Question " + (currentQuestion + 1) + "/" + questions.length;
 		document.getElementById("totalCorrectAnswers").innerHTML = totalCorrect + " correct answers";
-		// document.getElementById("flipQuestion").style.display="none";
 		currentQuestion++;
 	}
 	isEvaluated = false;
@@ -309,10 +300,7 @@ function eval() {
 	});
 	if (totallyCorrect) {
 		totalCorrect++;
-	} else {
-		totalWrong++;
 	}
-
 	isEvaluated = true;
 }
 
@@ -323,5 +311,4 @@ function selectAnswer(button, option) {
 	} else {
 		button.className = 'selected';
 	}
-
 }

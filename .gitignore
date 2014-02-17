@@ -1,6 +1,18 @@
-*.class
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+.project
+.settings/*
+assess-client/.classpath
+assess-client/.project
+assess-client/target/*
+*.swp
+local.properties
+.settings/
+.loadpath
+*.launch
+.buildpath
+.target
 
-# Package Files #
-*.jar
-*.war
-*.ear
