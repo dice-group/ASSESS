@@ -50,10 +50,10 @@ $(document).ready(function() {
 				$("#flipQuestion").unbind("click");
 				$("#flipQuestion").click(function() {
 					if (isEvaluated) {
-						$("#flipQuestion").html("Next");
+						$("#flipQuestion").html("Submit");
 						loadNewQuestion();
 					} else {
-						$("#flipQuestion").html("Submit");
+						$("#flipQuestion").html("Next");
 						eval();
 					}
 				});
@@ -322,7 +322,7 @@ function selectAnswer(button, option) {
 		button.className = 'selected';
 	}
 }
-
+//http://css-tricks.com/snippets/jquery/shuffle-dom-elements/
 (function($){
 	 
     $.fn.shuffle = function() {
