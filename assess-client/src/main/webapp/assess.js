@@ -13,6 +13,17 @@ var timer;
 $(document).ready(function() {
 	// genrate question on click
 	$('#generateQuestionsButton').click(function() {
+		// check for choosen domain and question type
+		if (!getQuestionTypesAsRestParam().length || !getDomainsAndProperties().length) {
+			$('#notify').html('You forgot to set either domains and properties or question type.').slideDown();
+			$('#notify').click(function() {
+				$(this).slideUp().empty();
+			});
+			return false;
+		} else {
+			$("#notify").hide();
+			$("#notify").slideUp().empty();
+		}
 		var l = Ladda.create(this);
 		l.start();
 		var domainsAndProperties = getDomainsAndProperties();
@@ -25,13 +36,15 @@ $(document).ready(function() {
 			url : rootURL + 'questions?' + getQuestionTypesAsRestParam() + '&limit=' + $('#numberOfQuestionsField').val(),
 			dataType : "json",
 			data : JSON.stringify(domainsAndProperties),
-
-			// data type of response
 			success : function(data) {
 				var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
 				questions = list[0].questions;
+				// init
 				$("#outerQuizContainer").show();
 				$("#flipQuestion").hide();
+				MAX_TIME = 600;
+				$('#startButton').show();
+				resetAllFields();
 
 				// either evaluate the questions, or show the next questions
 				$("#flipQuestion").unbind("click");
@@ -44,10 +57,6 @@ $(document).ready(function() {
 						eval();
 					}
 				});
-
-				MAX_TIME = 600;
-				$('#startButton').show();
-				resetAllFields();
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
 				alert("Status: " + textStatus);
