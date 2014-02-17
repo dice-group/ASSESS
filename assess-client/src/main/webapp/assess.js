@@ -37,10 +37,10 @@ $(document).ready(function() {
 				$("#flipQuestion").unbind("click");
 				$("#flipQuestion").click(function() {
 					if (isEvaluated) {
-						console.log("loadNewQuestion");
+						$("#flipQuestion").html("Next");
 						loadNewQuestion();
 					} else {
-						console.log("eval");
+						$("#flipQuestion").html("Submit");
 						eval();
 					}
 				});
