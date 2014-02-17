@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!-- /ht Paul Irish - http://front.ie/j5OMXi -->
+<!--[if lt IE 7 ]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>ASSESS - Automatic Self Assessment</title>
+<meta name="description" content="">
+<meta name="author" content="">
+<!-- /ht Andy Clarke - http://front.ie/lkCwyf -->
+<meta http-equiv="cleartype" content="on">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="/link/to/favicon.ico">
+<link rel="apple-touch-icon" href="/link/to/apple-touch-icon.png">
+<!-- /ht Jeremy Keith - http://front.ie/mLXiaS -->
+<link rel="stylesheet" href="goldilocks/global.css" media="all">
+<link rel="stylesheet" href="goldilocks/layout.css" media="all and (min-width: 33.236em)">
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="assess.css">
+<!-- 30em + (1.618em * 2) = 33.236em / Eliminates potential of horizontal scrolling in most cases -->
+<!--[if (lt IE 9) & (!IEMobile)]>
+<link rel="stylesheet" href="css/layout.css" media="all">
+<![endif]-->
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+<script src="goldilocks/modernizr-1.7.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="bootstrap/js/bootstrap.touchspin.js"></script>
+<script src="dist/spin.min.js"></script>
+<script src="dist/ladda.min.js"></script>
+<script src="dist/ladda.min.js"></script>
+<script type="text/javascript">
+	$(window).load(function() {
+		$(".loader").fadeOut("slow");
+	})
+</script>
+<script src="assess.js"></script>
+<!--CHECKBOX TREE-->
+<script type="text/javascript" src="minified/jquery.tree.min.js"></script>
+<link rel="stylesheet" type="text/css" href="minified/jquery.tree.min.css" />
+</head>
+</head>
+<body>
+	<div class="loader" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 9999; background: url('loader.gif') 50% 50% no-repeat rgb(249, 249, 249);"></div>
+	<div id="container" class="cf">
+		<header>
+			<h1>ASSESS - Automatic Self Assessment</h1>
+		</header>
+		<div id="main" role="main">
+			<div class="panel-group" id="accordion">
+				<div class="panel panel-default  panel-primary">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a id="collapse" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"> Create new set of questions </a>
+						</h4>
+					</div>
+					<div id="collapseOne" class="panel-collapse collapse in">
+						<div class="panel-body">
+
+							<form class="form-horizontal">
+								<fieldset>
+									<div class="form-group">
+										<div id="notify" class="col-md-7"
+											style="cursor: pointer; background-color: orange; height: auto; width: auto; color: white; display: none; margin-left: auto; margin-right: auto; padding: 0px;"></div>
+									</div>
+									<!-- Classes input-->
+									<div class="form-group">
+										<label class="col-md-2 control-label" for="domainField">Domain</label>
+										<div class="col-md-3 checkbox">
+											<div id="treecontainer" class="container" style="padding-left: 0px; display: none">
+												<div id="tree" class="col-md-5" style="overflow-y: scroll; height: 22em;"></div>
+											</div>
+										</div>
+									</div>
+									<!-- /input-group -->
+									<div class="form-group">
+										<label class="col-md-2 control-label" for="numberOfQuestionsField">Number of Questions</label>
+										<div class="col-md-1 checkbox">
+											<input id="numberOfQuestionsField" type="text" value="10" name="numberOfQuestionsField" class="form-control input-md" rel="tooltip"
+												title="The maximum number of questions that will be generated." data-placement="right">
+										</div>
+									</div>
+									<!-- Multiple Checkboxes -->
+									<div class="form-group">
+										<label class="col-md-2 control-label" for="questionTypesField">Question Types</label>
+										<div class="col-md-5 checkbox">
+											<div class="btn-group btn-group-justified" data-toggle="buttons">
+												<label class="btn btn-primary"> <input type="checkbox" name="questionTypesField" id="questionTypesField-0" value="1"> Multiple Choice
+												</label> <label class="btn btn-primary" rel="tooltip"
+													title="Questions are presented in form of answers, e.g. 'This person was born in Frankfurt and is the author of The Sorrows of Young Werther'(Answer: Johann Wolfgang von Goethe).">
+													<input type="checkbox" name="questionTypesField" id="questionTypesField-1" value="2"> Jeopardy
+												</label> <label class="btn btn-primary"> <input type="checkbox" name="questionTypesField" id="questionTypesField-2" value="3" rel="tooltip" title="Yes/No"> Yes/No
+												</label>
+											</div>
+										</div>
+									</div>
+								</fieldset>
+							</form>
+							<!-- Button -->
+							<div class="form-group">
+								<label class="col-md-2 control-label" for="generateQuestionsButton"></label>
+								<div class="col-md-5">
+									<button id="generateQuestionsButton" class="btn btn-primary" data-style="slide-down">Generate Questions &raquo;</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="outerQuizContainer" style="display: none;">
+					<div id="innerQuizContainer">
+						<div style="text-align: center; margin-top: 19px">
+							<div id="startButton" onClick="beginQuiz(this);" class="normalButton" style="padding: 8px 20px 8px 20px; display: inline;">Start Quiz</div>
+						</div>
+						<div id="totalScore">Total Score</div>
+						<div id="questionPanel" style="display: none;">
+							<div id="proceeding">Question</div>
+							<div id="totalCorrectAnswers"></div>
+							<div id="countDown"></div>
+							<div id="questionTitle">Question</div>
+							<div id="option0" onClick="selectAnswer(this,'0')" class="unselected">Option a</div>
+							<div id="option1" onClick="selectAnswer(this,'1')" class="unselected">Option b</div>
+							<div id="option2" onClick="selectAnswer(this,'2')" class="unselected">Option c</div>
+							<div id="option3" onClick="selectAnswer(this,'3')" class="unselected">Option d</div>
+							<div id="option4" onClick="selectAnswer(this,'4')" class="unselected">Option e</div>
+						</div>
+						<div style="text-align: right; margin: 30px 0px 10px 0px;">
+							<div class="statusMessage" style="color: green" id="correctMessage">Yippee this is correct</div>
+							<div class="statusMessage" style="color: #F72362" id="wrongMessage">Oops you are wrong</div>
+							<div id="flipQuestion" class="normalButton" style="padding: 3px 20px 3px 20px;">Submit</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer></footer>
+	</div>
+</body>
+</html>

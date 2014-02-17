@@ -73,7 +73,6 @@ $(document).ready(function() {
 	// $('#tree').tree(data);
 	// });
 	$("#tree").load("classes.html", function() {
-		$("#loadImage").hide();
 		$("#treecontainer").show();
 	});
 	$('#tree').tree();

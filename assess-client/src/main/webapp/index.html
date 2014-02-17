@@ -46,94 +46,23 @@
 		<header>
 			<h1>ASSESS - Automatic Self Assessment</h1>
 		</header>
-		<div id="main" role="main">
+		<div id="main">
 			<div class="panel-group" id="accordion">
 				<div class="panel panel-default  panel-primary">
 					<div class="panel-heading">
-						<h4 class="panel-title">
-							<a id="collapse" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"> Create new set of questions </a>
-						</h4>
+						<h4 class="panel-title">Terms Of Use</h4>
 					</div>
-					<div id="collapseOne" class="panel-collapse collapse in">
-						<div class="panel-body">
-
-							<form class="form-horizontal">
-								<fieldset>
-									<div class="form-group">
-										<div id="notify" class="col-md-7"
-											style="cursor: pointer; background-color: orange; height: auto; width: auto; color: white; display: none; margin-left: auto; margin-right: auto; padding: 0px;"></div>
-									</div>
-									<!-- Classes input-->
-									<div class="form-group">
-										<label class="col-md-2 control-label" for="domainField">Domain</label>
-										<div class="col-md-3 checkbox">
-											<img id="loadImage" alt="loading" src="loader.gif">
-											<div id="treecontainer" class="container" style="padding-left: 0px; display: none">
-												<div id="tree" class="col-md-5" style="overflow-y: scroll; height: 22em;"></div>
-											</div>
-										</div>
-									</div>
-									<!-- /input-group -->
-									<div class="form-group">
-										<label class="col-md-2 control-label" for="numberOfQuestionsField">Number of Questions</label>
-										<div class="col-md-1 checkbox">
-											<input id="numberOfQuestionsField" type="text" value="10" name="numberOfQuestionsField" class="form-control input-md" rel="tooltip"
-												title="The maximum number of questions that will be generated." data-placement="right">
-										</div>
-									</div>
-									<!-- Multiple Checkboxes -->
-									<div class="form-group">
-										<label class="col-md-2 control-label" for="questionTypesField">Question Types</label>
-										<div class="col-md-5 checkbox">
-											<div class="btn-group btn-group-justified" data-toggle="buttons">
-												<label class="btn btn-primary"> <input type="checkbox" name="questionTypesField" id="questionTypesField-0" value="1"> Multiple Choice
-												</label> <label class="btn btn-primary" rel="tooltip"
-													title="Questions are presented in form of answers, e.g. 'This person was born in Frankfurt and is the author of The Sorrows of Young Werther'(Answer: Johann Wolfgang von Goethe).">
-													<input type="checkbox" name="questionTypesField" id="questionTypesField-1" value="2"> Jeopardy
-												</label> <label class="btn btn-primary"> <input type="checkbox" name="questionTypesField" id="questionTypesField-2" value="3" rel="tooltip" title="Yes/No"> Yes/No
-												</label>
-											</div>
-										</div>
-									</div>
-								</fieldset>
-							</form>
-							<!-- Button -->
-							<div class="form-group">
-								<label class="col-md-2 control-label" for="generateQuestionsButton"></label>
-								<div class="col-md-5">
-									<button id="generateQuestionsButton" class="btn btn-primary" data-style="slide-down">Generate Questions &raquo;</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div id="outerQuizContainer" style="display: none;">
-					<div id="innerQuizContainer">
-						<div style="text-align: center; margin-top: 19px">
-							<div id="startButton" onClick="beginQuiz(this);" class="normalButton" style="padding: 8px 20px 8px 20px; display: inline;">Start Quiz</div>
-						</div>
-						<div id="totalScore">Total Score</div>
-						<div id="questionPanel" style="display: none;">
-							<div id="proceeding">Question</div>
-							<div id="totalCorrectAnswers"></div>
-							<div id="countDown"></div>
-							<div id="questionTitle">Question</div>
-							<div id="option0" onClick="selectAnswer(this,'0')" class="unselected">Option a</div>
-							<div id="option1" onClick="selectAnswer(this,'1')" class="unselected">Option b</div>
-							<div id="option2" onClick="selectAnswer(this,'2')" class="unselected">Option c</div>
-							<div id="option3" onClick="selectAnswer(this,'3')" class="unselected">Option d</div>
-							<div id="option4" onClick="selectAnswer(this,'4')" class="unselected">Option e</div>
-						</div>
-						<div style="text-align: right; margin: 30px 0px 10px 0px;">
-							<div class="statusMessage" style="color: green" id="correctMessage">Yippee this is correct</div>
-							<div class="statusMessage" style="color: #F72362" id="wrongMessage">Oops you are wrong</div>
-							<div id="flipQuestion" class="normalButton" style="padding: 3px 20px 3px 20px;">Submit</div>
+						<p style="max-width:100%;margin: 15px 10px 10px 10px;">With ASSESS, you can automatically generate tests from RDF knowledge bases. ASSESS is open-source. The code for the ASSESS server can be found at <a href="http://github.com/AKSW/SPARQL2NL">github.com/AKSW/SPARQL2NL</a>. The
+							code for the client is available at <a href="http://github.com/AKSW/ASSESS">github.com/AKSW/ASSESS</a>. The prototype is provided as-is, i.e., without any guarantee of any kind. Please feel free to use it at will. If you have any
+							questions, please contact <a href="mailto:{buehmann/usbeck/ngonga}@informatik.uni-leipzig.de">{buehmann/usbeck/ngonga}@informatik.uni-leipzig.de</a>. Enjoy. The ASSESS Team</p>
+					<div style="text-align: right; margin: 15px 10px 10px 10px;">
+						<div id="start" class="normalButton" style="padding: 3px 20px 3px 20px;">
+							<a href="assess.html" style="color: #FFFFFF;">Start Self Assessment!</a>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<footer></footer>
 	</div>
 </body>
 </html>
