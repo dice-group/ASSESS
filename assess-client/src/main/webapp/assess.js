@@ -69,12 +69,13 @@ $(document).ready(function() {
 	});
 
 	// !!! used for dynamically loading the tree !!!
-	// loadTreeData(function(data) {
-	// $('#tree').tree(data);
-	// });
-	$("#tree").load("classes.html", function() {
-		$("#treecontainer").show();
-	});
+	 loadTreeData(function(data) {
+		 $('#jstree').jstree(data);
+	 });
+	
+//	$("#tree").load("classes.html", function() {
+//		$("#treecontainer").show();
+//	});
 	$('#tree').tree();
 	$('#collapse').click(function() {
 		$("#totalScore").html("");
@@ -87,34 +88,129 @@ $(document).ready(function() {
 	});
 });
 
-// !!!wichtig!!!
+function showTree(data) {
+//	$('#jstree').jstree({
+//		"checkbox" : {
+//			real_checkboxes : true,
+//			two_state : true,
+//			checked_parent_open : true,
+//			override_ui : true
+//		},
+//		// the `plugins` array allows you to configure the active plugins on
+//		// this instance
+//		"plugins" : [ "themes", "ui", "crrm", "hotkeys", "checkbox" ],
+//		'core' : {
+//			'data' : data,
+//			// "checkbox" : {
+//			// "keep_selected_style" : false
+//			// },
+//			// set a theme
+//			"themes" : {
+//				"theme" : "proton",
+//				"dots" : false,
+//				"icons" : false
+//
+//			},
+//			
+//		}
+//	});
+	$("#jstree").fancytree({
+		source : data,
+		activeVisible: true, // Make sure, active nodes are visible (expanded).
+	    aria: false, // Enable WAI-ARIA support.
+	    autoActivate: true, // Automatically activate a node when it is focused (using keys).
+	    autoCollapse: false, // Automatically collapse all siblings, when a node is expanded.
+	    autoScroll: false, // Automatically scroll nodes into visible area.
+	    clickFolderMode: 4, // 1:activate, 2:expand, 3:activate and expand, 4:activate (dblclick expands)
+	    checkbox: true, // Show checkboxes.
+	    debugLevel: 0, // 0:quiet, 1:normal, 2:debug
+	    disabled: false, // Disable control
+	    generateIds: false, // Generate id attributes like <span id='fancytree-id-KEY'>
+	    idPrefix: "ft_", // Used to generate node id´s like <span id='fancytree-id-<key>'>.
+	    icons: false, // Display node icons.
+	    keyboard: true, // Support keyboard navigation.
+	    keyPathSeparator: "/", // Used by node.getKeyPath() and tree.loadKeyPath().
+	    minExpandLevel: 1, // 1: root node is not collapsible
+	    selectMode: 3, // 1:single, 2:multi, 3:multi-hier
+	    tabbable: true, // Whole tree behaves as one single control
+	    titlesTabbable: false // Node titles can receive keyboard focus
+
+	});
+	
+}
+
+// // !!!wichtig!!!
+//function loadTreeData(callback) {
+//	var rex = /([A-Z])([A-Z])([a-z])|([a-z])([A-Z])/g;
+//	$.ajax({
+//		type : 'GET',
+//		url : rootURL + 'entities',
+//		dataType : "json",
+//		success : function(data) {
+//			var tree = new Object();
+//			var arrayOfClasses = [];
+//			var classes = [];
+//			$.each(data, function(index) {
+//				var entry = new Object();
+//				entry.id = index;
+//				entry.parent = "#";
+//				entry.text = index.replace("http://dbpedia.org/ontology/", "").replace( rex, '$1$4 $2$3$5' );;
+//				var node = new Object();
+//				var span = new Object();
+//				span.html = index.replace("http://dbpedia.org/ontology/", "");
+//				node.span = span;
+//				var children = [];
+//				$.each(this, function(k) {
+//					var child = new Object();
+//					child.id = index + this;
+//					child.parent = index;
+//					child.text = this.replace("http://dbpedia.org/ontology/", "");
+//					classes.push(child);
+//					var childNode = new Object();
+//					var span = new Object();
+//					span.html = this.replace("http://dbpedia.org/ontology/", "");
+//					childNode.span = span;
+////					children.push(childNode);
+//				});
+////				entry.children = children;
+//				node.children = children;
+//				arrayOfClasses.push(node);
+//				classes.push(entry);
+//			});
+//			tree.nodes = arrayOfClasses;
+//			showTree(classes);
+//		},
+//		error : function(XMLHttpRequest, textStatus, errorThrown) {
+//			alert("Status: " + textStatus);
+//			alert("Error: " + errorThrown);
+//		}
+//	});
+//}
+
+//!!!wichtig!!!
 function loadTreeData(callback) {
+	var rex = /([A-Z])([A-Z])([a-z])|([a-z])([A-Z])/g;
 	$.ajax({
 		type : 'GET',
 		url : rootURL + 'entities',
 		dataType : "json",
 		success : function(data) {
-			var tree = new Object();
-			var arrayOfClasses = [];
+			var classes = [];
 			$.each(data, function(index) {
-				var node = new Object();
-				var span = new Object();
-				span.html = index.replace("http://dbpedia.org/ontology/", "");
-				node.span = span;
+				var entry = new Object();
+				entry.key = index;
+				entry.title = index.replace("http://dbpedia.org/ontology/", "").replace( rex, '$1$4 $2$3$5' );;
 				var children = [];
+				entry.children = children;
 				$.each(this, function(k) {
-					var childNode = new Object();
-					var span = new Object();
-					span.html = this.replace("http://dbpedia.org/ontology/", "");
-					childNode.span = span;
-					children.push(childNode);
+					var child = new Object();
+					child.key = index + this;
+					child.title = this.replace("http://dbpedia.org/ontology/", "");
+					children.push(child);
 				});
-				node.children = children;
-				arrayOfClasses.push(node);
+				classes.push(entry);
 			});
-			tree.nodes = arrayOfClasses;
-			return callback(tree);
-
+			showTree(classes);
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("Status: " + textStatus);
@@ -124,23 +220,48 @@ function loadTreeData(callback) {
 }
 
 function getDomainsAndProperties() {
-	var domains = [];
-	$('#tree > ul > li > input').each(function() {
-		if (this.checked) {
-			var next = $(this).next();
-			var Class = new Object();
-			Class.className = next.html();
-			var properties = [];
-			$(next).siblings("ul").children().children().each(function() {
-				if (this.checked) {
-					properties.push($(this).next().text());
-				}
-			});
-			Class.properties = properties;
-			domains.push(Class);
+	var nodes = $("#jstree").fancytree('getTree').getSelectedNodes();
+	var domains = {}; 
+
+		$(nodes).each(function() {
+
+		var cls = this.parent.key;
+		var property = this.key.replace(cls, '');
+		if (cls in domains) {
+			domains[cls].push(property);
+		} else {
+			domains[cls] = [];
+			domains[cls].push(property);
 		}
 	});
-	return domains;
+	var domains2 = [];
+	for ( var key in domains) {
+		console.log("Key:" + key);
+		var cls = new Object();
+		cls.className = key;
+		var properties = domains[key];
+		cls.properties = properties;
+		domains2.push(cls);
+	}
+	return domains2;
+	
+//	var domains = [];
+//	$('#tree > ul > li > input').each(function() {
+//		if (this.checked) {
+//			var next = $(this).next();
+//			var Class = new Object();
+//			Class.className = next.html();
+//			var properties = [];
+//			$(next).siblings("ul").children().children().each(function() {
+//				if (this.checked) {
+//					properties.push($(this).next().text());
+//				}
+//			});
+//			Class.properties = properties;
+//			domains.push(Class);
+//		}
+//	});
+//	return domains;
 
 }
 

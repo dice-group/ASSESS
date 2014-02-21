@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="goldilocks/layout.css" media="all and (min-width: 33.236em)">
 <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
 <link rel="stylesheet" href="assess.css">
+
 <!-- 30em + (1.618em * 2) = 33.236em / Eliminates potential of horizontal scrolling in most cases -->
 <!--[if (lt IE 9) & (!IEMobile)]>
 <link rel="stylesheet" href="css/layout.css" media="all">
@@ -35,6 +36,8 @@
 <script src="dist/spin.min.js"></script>
 <script src="dist/ladda.min.js"></script>
 <script src="dist/ladda.min.js"></script>
+<script src="jstree/jstree.min.js"></script>
+<link rel="stylesheet" href="jstree/themes/default/style.min.css" />
 <script type="text/javascript">
 	$(window).load(function() {
 		$(".loader").fadeOut("slow");
@@ -44,6 +47,10 @@
 <!--CHECKBOX TREE-->
 <script type="text/javascript" src="minified/jquery.tree.min.js"></script>
 <link rel="stylesheet" type="text/css" href="minified/jquery.tree.min.css" />
+
+ <!-- Include Fancytree skin and library -->
+  <link href="fancytree/skin-win8/ui.fancytree.css" rel="stylesheet" type="text/css">
+  <script src="fancytree/jquery.fancytree-all.min.js" type="text/javascript"></script>
 </head>
 </head>
 <body>
@@ -69,14 +76,12 @@
 										<div id="notify" class="col-md-7"
 											style="cursor: pointer; background-color: orange; height: auto; width: auto; color: white; display: none; margin-left: auto; margin-right: auto; padding: 0px;"></div>
 									</div>
+									
 									<!-- Classes input-->
 									<div class="form-group">
 										<label class="col-md-2 control-label" for="domainField">Domain</label>
-										<div class="col-md-3 checkbox">
-											<div id="treecontainer" class="container" style="padding-left: 0px; display: none">
-												<div id="tree" class="col-md-5" style="overflow-y: scroll; height: 22em;"></div>
-											</div>
-										</div>
+										<div id="jstree" class="col-md-5" style="height: 22em;"></div>
+										
 									</div>
 									<!-- /input-group -->
 									<div class="form-group">
