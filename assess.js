@@ -72,7 +72,7 @@ $(document).ready(function() {
 	// loadTreeData(function(data) {
 	// $('#tree').tree(data);
 	// });
-	$("#tree").load(".classes.html", function() {
+	$("#tree").load("classes.html", function() {
 		$("#treecontainer").show();
 	});
 	$('#tree').tree();
