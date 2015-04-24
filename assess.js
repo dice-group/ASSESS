@@ -1,5 +1,5 @@
 //var rootURL = "http://[2001:638:902:2010:0:168:35:113]:8080/sparql2nl/rest/assess/";
-var rootURL = "http://139.18.2.56:8080/sparql2nl/rest/assess/";
+var rootURL = "http://139.18.2.164:5678/assess/assess/";
 // var rootURL = "http://localhost:5678/rest/assess/";
 var currentQuestion = 0;
 var totalCorrect = 0;
@@ -72,6 +72,11 @@ $(document).ready(function() {
 	// loadTreeData(function(data) {
 	// $('#tree').tree(data);
 	// });
+	//$('#tree').tree({
+//		dataSourceUrl: 'classes.json'
+//	});
+//	$("#treecontainer").show();
+
 	$("#tree").load("classes.html", function() {
 		$("#treecontainer").show();
 	});
