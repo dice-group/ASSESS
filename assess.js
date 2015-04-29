@@ -136,11 +136,11 @@ function getDomainsAndProperties() {
 		if (this.checked) {
 			var next = $(this).next();
 			var Class = new Object();
-			Class.className = next.html();
+			Class.className = "http://dbpedia.org/ontology/"+ next.html();
 			var properties = [];
 			$(next).siblings("ul").children().children().each(function() {
 				if (this.checked) {
-					properties.push($(this).next().text());
+					properties.push("http://dbpedia.org/ontology/"+ $(this).next().text());
 				}
 			});
 			Class.properties = properties;
