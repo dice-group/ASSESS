@@ -27,6 +27,7 @@ $(document).ready(function() {
 		var l = Ladda.create(this);
 		l.start();
 		var domainsAndProperties = getDomainsAndProperties();
+		console.log(domainsAndProperties);
 		$.ajax({
 			headers : {
 				'Accept' : 'application/json',
@@ -37,6 +38,7 @@ $(document).ready(function() {
 			dataType : "json",
 			data : JSON.stringify(domainsAndProperties),
 			success : function(data) {
+				console.log("success" + data);
 				var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
 				questions = list[0].questions;
 				// init
