@@ -1,4 +1,8 @@
-ASSESS
+ASSESS - Client
 ======
 
-a platform for automatic self-assessment
+This project develops the frontend of http://assess.aksw.org - an automatic self-assessment platform based on RDF.
+
+A running demo can be found here http://assess.aksw.org/demo/.
+
+The underlying backend can be found here http://github.com/aksw/Semweb2NL.
