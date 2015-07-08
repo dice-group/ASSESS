@@ -1,5 +1,5 @@
 //var rootURL = "http://[2001:638:902:2010:0:168:35:113]:8080/sparql2nl/rest/assess/";
-var rootURL = "http://139.18.2.56:8080/sparql2nl/rest/assess/";
+var rootURL = "http://139.18.2.164:5678/assess/assess/";
 // var rootURL = "http://localhost:5678/rest/assess/";
 var currentQuestion = 0;
 var totalCorrect = 0;
@@ -27,6 +27,7 @@ $(document).ready(function() {
 		var l = Ladda.create(this);
 		l.start();
 		var domainsAndProperties = getDomainsAndProperties();
+		console.log(domainsAndProperties);
 		$.ajax({
 			headers : {
 				'Accept' : 'application/json',
@@ -37,6 +38,7 @@ $(document).ready(function() {
 			dataType : "json",
 			data : JSON.stringify(domainsAndProperties),
 			success : function(data) {
+				console.log("success" + data);
 				var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
 				questions = list[0].questions;
 				// init
@@ -69,6 +71,7 @@ $(document).ready(function() {
 	});
 
 	// !!! used for dynamically loading the tree !!!
+<<<<<<< HEAD:assess-client/src/main/webapp/assess.js
 	 loadTreeData(function(data) {
 		 $('#jstree').jstree(data);
 	 });
@@ -76,6 +79,19 @@ $(document).ready(function() {
 //	$("#tree").load("classes.html", function() {
 //		$("#treecontainer").show();
 //	});
+=======
+	// loadTreeData(function(data) {
+	// $('#tree').tree(data);
+	// });
+	//$('#tree').tree({
+//		dataSourceUrl: 'classes.json'
+//	});
+//	$("#treecontainer").show();
+
+	$("#tree").load("classes.html", function() {
+		$("#treecontainer").show();
+	});
+>>>>>>> origin/simple_project:assess.js
 	$('#tree').tree();
 	$('#collapse').click(function() {
 		$("#totalScore").html("");
@@ -220,6 +236,7 @@ function loadTreeData(callback) {
 }
 
 function getDomainsAndProperties() {
+<<<<<<< HEAD:assess-client/src/main/webapp/assess.js
 	var nodes = $("#jstree").fancytree('getTree').getSelectedNodes();
 	var domains = {}; 
 
@@ -232,6 +249,22 @@ function getDomainsAndProperties() {
 		} else {
 			domains[cls] = [];
 			domains[cls].push(property);
+=======
+	var domains = [];
+	$('#tree > ul > li > input').each(function() {
+		if (this.checked) {
+			var next = $(this).next();
+			var Class = new Object();
+			Class.className = "http://dbpedia.org/ontology/"+ next.html();
+			var properties = [];
+			$(next).siblings("ul").children().children().each(function() {
+				if (this.checked) {
+					properties.push("http://dbpedia.org/ontology/"+ $(this).next().text());
+				}
+			});
+			Class.properties = properties;
+			domains.push(Class);
+>>>>>>> origin/simple_project:assess.js
 		}
 	});
 	var domains2 = [];
