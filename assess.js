@@ -1,5 +1,5 @@
 //var rootURL = "http://[2001:638:902:2010:0:168:35:113]:8080/sparql2nl/rest/assess/";
-var rootURL = "http://139.18.2.164:5678/assess/assess/";
+var rootURL = "http://139.18.2.164:8080/assess-service/rest/";
 // var rootURL = "http://localhost:5678/rest/assess/";
 var currentQuestion = 0;
 var totalCorrect = 0;
@@ -93,6 +93,30 @@ $(document).ready(function() {
 		$('#outerQuizContainer').hide();
 	});
 });
+
+function createCORSRequest(method, url) {
+  var xhr = new XMLHttpRequest();
+  if ("withCredentials" in xhr) {
+
+    // Check if the XMLHttpRequest object has a "withCredentials" property.
+    // "withCredentials" only exists on XMLHTTPRequest2 objects.
+    xhr.open(method, url, true);
+
+  } else if (typeof XDomainRequest != "undefined") {
+
+    // Otherwise, check if XDomainRequest.
+    // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+    xhr = new XDomainRequest();
+    xhr.open(method, url);
+
+  } else {
+
+    // Otherwise, CORS is not supported by the browser.
+    xhr = null;
+
+  }
+  return xhr;
+}
 
 // !!!wichtig!!!
 function loadTreeData(callback) {
