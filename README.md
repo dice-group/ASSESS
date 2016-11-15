@@ -15,13 +15,13 @@ http://github.com/aksw/Semweb2NL
 
 Howto get the frontend working:
 
-.) Clone the repo an go into the folder.
+1. Clone the repo an go into the folder.
 
-.) Build the image.
+2. Build the image.
 
 `sudo docker build -t assess-demo-client .`
 
-.) Run the Image.
+3. Run the Image.
 
 `sudo docker run -d --restart=always --name assess-demo-client --link assess-demo-backend -p 9909:8080 assess-demo-client`
 
